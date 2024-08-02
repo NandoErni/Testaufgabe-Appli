@@ -5,6 +5,7 @@ namespace testaufgabe.Dtos
 	{
         public string Station { get; set; }
         public DateTime Timestamp { get; set; }
+        public WeatherDataValuesDto Values { get; set; }
     }
 }
 

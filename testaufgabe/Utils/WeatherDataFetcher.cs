@@ -8,6 +8,11 @@ namespace testaufgabe.Utils
 		{
 			_httpClient = httpClient;
 		}
+
+		public async Task<List<WeatherDataDto>> FetchWeatherDataAsync()
+		{
+
+		}
 	}
 }
 
