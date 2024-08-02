@@ -32,34 +32,49 @@ namespace testaufgabe.Services
             await _repository.SaveWeatherDataAsync(dataUsingModels);
         }
 
-        public Task<List<WeatherData>> GetWeatherData(DateTime start, DateTime end, WeatherDataStation? station)
+        public async Task<List<WeatherData>> GetWeatherData(DateTime start, DateTime end, WeatherDataStation? station)
+        {
+            CheckDateTimes(start, end);
+            return (List<WeatherData>)await _repository.GetWeatherDataAsync(start, end, station);
+        }
+
+        public async Task<WeatherData> GetWeatherDataAvg(DateTime start, DateTime end, WeatherDataType? weatherDataType, WeatherDataStation? station)
+        {
+            CheckDateTimes(start, end);
+            CheckWeatherDataType(weatherDataType);
+            throw new NotImplementedException();
+        }
+
+        public async Task<List<WeatherData>> GetWeatherDataCount(DateTime start, DateTime end, WeatherDataStation? station)
         {
             CheckDateTimes(start, end);
             throw new NotImplementedException();
         }
 
-        public Task<List<WeatherData>> GetWeatherDataAvg(DateTime start, DateTime end, WeatherDataType? weatherDataType, WeatherDataStation? station)
+        public async Task<WeatherData> GetWeatherDataMax(DateTime start, DateTime end, WeatherDataType? weatherDataType, WeatherDataStation? station)
         {
             CheckDateTimes(start, end);
+            CheckWeatherDataType(weatherDataType);
             throw new NotImplementedException();
         }
 
-        public Task<List<WeatherData>> GetWeatherDataCount(DateTime start, DateTime end, WeatherDataStation? station)
+        public async Task<WeatherData> GetWeatherDataMin(DateTime start, DateTime end, WeatherDataType? weatherDataType, WeatherDataStation? station)
         {
             CheckDateTimes(start, end);
-            throw new NotImplementedException();
-        }
+            CheckWeatherDataType(weatherDataType);
 
-        public Task<List<WeatherData>> GetWeatherDataMax(DateTime start, DateTime end, WeatherDataType? weatherDataType, WeatherDataStation? station)
-        {
-            CheckDateTimes(start, end);
-            throw new NotImplementedException();
-        }
+            var weatherData = await _repository.GetWeatherDataAsync(start, end, station);
 
-        public Task<List<WeatherData>> GetWeatherDataMin(DateTime start, DateTime end, WeatherDataType? weatherDataType, WeatherDataStation? station)
-        {
-            CheckDateTimes(start, end);
-            throw new NotImplementedException();
+            var minEntry = weatherDataType switch
+            {
+                WeatherDataType.AirTemperature => weatherData.MinBy(w => w.AirTemperature.Value),
+                WeatherDataType.WaterTemperature => weatherData.MinBy(w => w.WaterTemperature.Value),
+                WeatherDataType.BarometricPressure => weatherData.MinBy(w => w.BarometricPressure.Value),
+                WeatherDataType.Humidity => weatherData.MinBy(w => w.Humidity.Value),
+                _ => throw new ArgumentException($"Unkown Enum Value {weatherDataType}")
+            };
+
+            return minEntry;
         }
 
         private void CheckDateTimes(DateTime start, DateTime end)
@@ -67,6 +82,14 @@ namespace testaufgabe.Services
             if (end < start)
             {
                 throw new ArgumentException($"The start time {start} has to be before the end time {end}");
+            }
+        }
+
+        private void CheckWeatherDataType(WeatherDataType? weatherDataType)
+        {
+            if (!weatherDataType.HasValue)
+            {
+                throw new ArgumentException("No weather data type provided.");
             }
         }
 

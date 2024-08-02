@@ -50,7 +50,7 @@ namespace testaufgabe.Controllers
         [HttpGet("min")]
         public async Task<IActionResult> GetWeatherDataMin(DateTime start, DateTime end, WeatherDataType? weatherDataType = null, WeatherDataStation? station = null)
         {
-            List<WeatherData> weatherData;
+            WeatherData weatherData;
             try
             {
                 weatherData = await _service.GetWeatherDataMin(start, end, weatherDataType, station);
@@ -66,7 +66,7 @@ namespace testaufgabe.Controllers
         [HttpGet("max")]
         public async Task<IActionResult> GetWeatherDataMax(DateTime start, DateTime end, WeatherDataType? weatherDataType = null, WeatherDataStation? station = null)
         {
-            List<WeatherData> weatherData;
+            WeatherData weatherData;
             try
             {
                 weatherData = await _service.GetWeatherDataMax(start, end, weatherDataType, station);
@@ -82,7 +82,7 @@ namespace testaufgabe.Controllers
         [HttpGet("avg")]
         public async Task<IActionResult> GetWeatherDataAvg(DateTime start, DateTime end, WeatherDataType? weatherDataType = null, WeatherDataStation? station = null)
         {
-            List<WeatherData> weatherData;
+            WeatherData weatherData;
             try
             {
                 weatherData = await _service.GetWeatherDataAvg(start, end, weatherDataType, station);
