@@ -152,6 +152,22 @@ namespace Tests
             data.ToList().ForEach(d => Assert.True(d.Type == WeatherDataType.AirTemperature));
 
         }
+
+        [Fact]
+        public async Task RemoveGivenWeatherDataAsync_RemoveData()
+        {
+            using var context = new WeatherDataContext(_dbContextOptions);
+
+            var repository = await CreateRepositoryWithData(context);
+
+            var data = await repository.GetWeatherDataAsync(DateTime.MinValue, DateTime.MaxValue);
+            var dataToDelete = data.Where(d => d.Station == WeatherDataStation.Mythenquai);
+
+            await repository.RemoveGivenWeatherDataAsync(dataToDelete);
+
+            data = await repository.GetWeatherDataAsync(DateTime.MinValue, DateTime.MaxValue);
+            data.ToList().ForEach(d => Assert.DoesNotContain(d, dataToDelete));
+        }
     }
 }
 

@@ -41,6 +41,12 @@ namespace testaufgabe.Repositories
             _context.WeatherData.AddRange(weatherData);
             await _context.SaveChangesAsync();
 		}
+
+        public async Task RemoveGivenWeatherDataAsync(IEnumerable<WeatherData> weatherData)
+        {
+            _context.WeatherData.RemoveRange(weatherData);
+            await _context.SaveChangesAsync();
+        }
     }
 }
 
