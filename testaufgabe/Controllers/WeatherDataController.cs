@@ -1,19 +1,114 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-
-// For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+using testaufgabe.Models;
+using testaufgabe.Services;
+using static System.Collections.Specialized.BitVector32;
 
 namespace testaufgabe.Controllers
 {
+
+    [ApiController]
+    [Route("api/weatherdata")]
     public class WeatherDataController : Controller
     {
-        
-        public IActionResult Index()
+
+        private readonly WeatherDataService _service;
+
+        public WeatherDataController(WeatherDataService service)
         {
-            return View();
+            _service = service;
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetWeatherData(DateTime start, DateTime end, WeatherDataType? weatherDataType = null, WeatherDataStation? station = null)
+        {
+            List<WeatherData> weatherData;
+            try
+            {
+                weatherData = await _service.GetWeatherData(start, end, weatherDataType, station);
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+
+            return Ok(weatherData);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> UpdateWeatherData()
+        {
+            await _service.UpdateWeatherData();
+
+            return Ok();
+        }
+
+        [HttpGet("min")]
+        public async Task<IActionResult> GetWeatherDataMin(DateTime start, DateTime end, WeatherDataType? weatherDataType = null, WeatherDataStation? station = null)
+        {
+            List<WeatherData> weatherData;
+            try
+            {
+                weatherData = await _service.GetWeatherDataMin(start, end, weatherDataType, station);
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+
+            return Ok(weatherData);
+        }
+
+        [HttpGet("max")]
+        public async Task<IActionResult> GetWeatherDataMax(DateTime start, DateTime end, WeatherDataType? weatherDataType = null, WeatherDataStation? station = null)
+        {
+            List<WeatherData> weatherData;
+            try
+            {
+                weatherData = await _service.GetWeatherDataMax(start, end, weatherDataType, station);
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+
+            return Ok(weatherData);
+        }
+
+        [HttpGet("avg")]
+        public async Task<IActionResult> GetWeatherDataAvg(DateTime start, DateTime end, WeatherDataType? weatherDataType = null, WeatherDataStation? station = null)
+        {
+            List<WeatherData> weatherData;
+            try
+            {
+                weatherData = await _service.GetWeatherDataAvg(start, end, weatherDataType, station);
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+
+            return Ok(weatherData);
+        }
+
+        [HttpGet("count")]
+        public async Task<IActionResult> GetWeatherDataCount(DateTime start, DateTime end, WeatherDataType? weatherDataType = null, WeatherDataStation? station = null)
+        {
+            List<WeatherData> weatherData;
+            try
+            {
+                weatherData = await _service.GetWeatherDataCount(start, end, weatherDataType, station);
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+
+            return Ok(weatherData);
         }
     }
 }
