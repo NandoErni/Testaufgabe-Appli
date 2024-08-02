@@ -24,12 +24,12 @@ namespace testaufgabe.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetWeatherData(DateTime start, DateTime end, WeatherDataType? weatherDataType = null, WeatherDataStation? station = null)
+        public async Task<IActionResult> GetWeatherData(DateTime start, DateTime end, WeatherDataStation? station = null)
         {
             List<WeatherData> weatherData;
             try
             {
-                weatherData = await _service.GetWeatherData(start, end, weatherDataType, station);
+                weatherData = await _service.GetWeatherData(start, end, station);
             }
             catch (ArgumentException ex)
             {
@@ -96,12 +96,12 @@ namespace testaufgabe.Controllers
         }
 
         [HttpGet("count")]
-        public async Task<IActionResult> GetWeatherDataCount(DateTime start, DateTime end, WeatherDataType? weatherDataType = null, WeatherDataStation? station = null)
+        public async Task<IActionResult> GetWeatherDataCount(DateTime start, DateTime end, WeatherDataStation? station = null)
         {
             List<WeatherData> weatherData;
             try
             {
-                weatherData = await _service.GetWeatherDataCount(start, end, weatherDataType, station);
+                weatherData = await _service.GetWeatherDataCount(start, end, station);
             }
             catch (ArgumentException ex)
             {

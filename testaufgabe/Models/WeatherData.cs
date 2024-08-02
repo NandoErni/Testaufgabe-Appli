@@ -3,14 +3,18 @@ using Microsoft.EntityFrameworkCore;
 
 namespace testaufgabe.Models
 {
-    [PrimaryKey(nameof(Station), nameof(Timestamp), nameof(Type))]
+    [PrimaryKey(nameof(Station), nameof(Timestamp))]
     public class WeatherData
 	{
-        public WeatherDataStation Station { get; set; }
-        public DateTime Timestamp { get; set; }
-        public WeatherDataType Type { get; set; }
-        public double Value { get; set; }
-        public string Unit { get; set; }
+        public WeatherDataStation Station;
+        public DateTime Timestamp;
+
+        public WeatherDataValue AirTemperature;
+
+        public WeatherDataValue WaterTemperature;
+
+        public WeatherDataValue BarometricPressure;
+
+        public WeatherDataValue Humidity;
     }
 }
-

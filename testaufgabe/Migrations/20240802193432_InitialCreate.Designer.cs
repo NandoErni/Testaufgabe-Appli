@@ -11,7 +11,7 @@ using testaufgabe.Data;
 namespace testaufgabe.Migrations
 {
     [DbContext(typeof(WeatherDataContext))]
-    [Migration("20240802150031_InitialCreate")]
+    [Migration("20240802193432_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -28,17 +28,7 @@ namespace testaufgabe.Migrations
                     b.Property<DateTime>("Timestamp")
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("Type")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("Unit")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<double>("Value")
-                        .HasColumnType("REAL");
-
-                    b.HasKey("Station", "Timestamp", "Type");
+                    b.HasKey("Station", "Timestamp");
 
                     b.ToTable("WeatherData");
                 });

@@ -14,7 +14,7 @@ namespace testaufgabe.Repositories
             _context = context;
         }
 
-        public async Task<IEnumerable<WeatherData>> GetWeatherDataAsync(DateTime start, DateTime end, WeatherDataType? type = null, WeatherDataStation? station = null)
+        public async Task<IEnumerable<WeatherData>> GetWeatherDataAsync(DateTime start, DateTime end, WeatherDataStation? station = null)
         {
             if (end < start)
             {
@@ -22,11 +22,6 @@ namespace testaufgabe.Repositories
             }
 
             var query = _context.WeatherData.AsQueryable();
-
-            if (type.HasValue)
-            {
-                query = query.Where(d => d.Type == type);
-            }
             if (station.HasValue)
             {
                 query = query.Where(d => d.Station == station);

@@ -25,17 +25,7 @@ namespace testaufgabe.Migrations
                     b.Property<DateTime>("Timestamp")
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("Type")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("Unit")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<double>("Value")
-                        .HasColumnType("REAL");
-
-                    b.HasKey("Station", "Timestamp", "Type");
+                    b.HasKey("Station", "Timestamp");
 
                     b.ToTable("WeatherData");
                 });
