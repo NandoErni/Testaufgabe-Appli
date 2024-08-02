@@ -3,7 +3,7 @@ namespace testaufgabe.Dtos
 {
 	public class WeatherDataDto
 	{
-        public string Station { get; set; }
+        public WeatherStationEnum Station { get; set; }
         public DateTime Timestamp { get; set; }
         public WeatherDataValuesDto Values { get; set; }
     }
