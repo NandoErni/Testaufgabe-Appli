@@ -25,7 +25,17 @@ namespace testaufgabe.Utils
                 throw new HttpRequestException($"Failed to fetch data: {response.ReasonPhrase}");
             }
 
-            throw new NotImplementedException();
+            var content = await response.Content.ReadAsStringAsync();
+            var json = JObject.Parse(content);
+
+            var records = json["result"]?.ToObject<List<WeatherDataDto>>();
+
+            if (records == null)
+            {
+                throw new Exception("Failed to parse weather data.");
+            }
+
+            return records;
         }
     }
 }

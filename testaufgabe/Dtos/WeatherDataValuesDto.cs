@@ -1,15 +1,21 @@
 ﻿using System;
+using Newtonsoft.Json;
+
 namespace testaufgabe.Dtos
 {
 	public class WeatherDataValuesDto
 	{
-		public WeatherDataTypeDto AirTemperature { get; set; }
+        [JsonProperty("air_temperature")]
+        public WeatherDataTypeDto AirTemperature { get; set; }
 
-		public WeatherDataTypeDto WaterTemperature { get; set; }
+        [JsonProperty("water_temperature")]
+        public WeatherDataTypeDto WaterTemperature { get; set; }
 
-		public WeatherDataTypeDto BarometricPressure { get; set; }
+        [JsonProperty("barometric_pressure_qfe")]
+        public WeatherDataTypeDto BarometricPressure { get; set; }
 
-		public WeatherDataTypeDto Humidity { get; set; }
+        [JsonProperty("humidity")]
+        public WeatherDataTypeDto Humidity { get; set; }
 	}
 }
 
