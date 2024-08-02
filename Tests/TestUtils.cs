@@ -114,7 +114,7 @@ namespace Tests
                 Timestamp = new DateTime(2024, 4, 13),
                     AirTemperature = new WeatherDataValue()
                     {
-                        Value = 44.12,
+                        Value = 33.61,
                         Unit = "°C"
                     },
                     WaterTemperature = new WeatherDataValue()

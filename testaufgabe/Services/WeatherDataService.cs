@@ -38,11 +38,13 @@ namespace testaufgabe.Services
             return (List<WeatherData>)await _repository.GetWeatherDataAsync(start, end, station);
         }
 
-        public async Task<WeatherData> GetWeatherDataAvg(DateTime start, DateTime end, WeatherDataType? weatherDataType, WeatherDataStation? station)
+        public async Task<double> GetWeatherDataAvg(DateTime start, DateTime end, WeatherDataType? weatherDataType, WeatherDataStation? station)
         {
             CheckDateTimes(start, end);
             CheckWeatherDataType(weatherDataType);
-            throw new NotImplementedException();
+
+
+            return await _repository.GetWeatherDataAverageAsync(start, end, weatherDataType.Value, station);
         }
 
         public async Task<int> GetWeatherDataCount(DateTime start, DateTime end, WeatherDataStation? station)

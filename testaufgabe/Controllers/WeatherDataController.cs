@@ -82,17 +82,17 @@ namespace testaufgabe.Controllers
         [HttpGet("avg")]
         public async Task<IActionResult> GetWeatherDataAvg(DateTime start, DateTime end, WeatherDataType? weatherDataType = null, WeatherDataStation? station = null)
         {
-            WeatherData weatherData;
+            double averageWeatherData;
             try
             {
-                weatherData = await _service.GetWeatherDataAvg(start, end, weatherDataType, station);
+                averageWeatherData = await _service.GetWeatherDataAvg(start, end, weatherDataType, station);
             }
             catch (ArgumentException ex)
             {
                 return BadRequest(ex.Message);
             }
 
-            return Ok(weatherData);
+            return Ok(averageWeatherData);
         }
 
         [HttpGet("count")]

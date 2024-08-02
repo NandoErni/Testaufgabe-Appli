@@ -92,7 +92,8 @@ namespace Tests
         [Fact]
         public async Task GetWeatherData_ShouldReturnAverageOfAllEntries()
         {
-
+            var averageAirTemp = await _service.GetWeatherDataAvg(DateTime.MinValue, DateTime.MaxValue, WeatherDataType.AirTemperature, null);
+            Assert.Equal(30, averageAirTemp);
         }
 
         [Fact]

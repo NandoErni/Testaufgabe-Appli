@@ -16,7 +16,15 @@ namespace testaufgabe.Migrations
                 columns: table => new
                 {
                     Station = table.Column<int>(type: "INTEGER", nullable: false),
-                    Timestamp = table.Column<DateTime>(type: "TEXT", nullable: false)
+                    Timestamp = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    AirTemperature_Unit = table.Column<string>(type: "TEXT", nullable: true),
+                    AirTemperature_Value = table.Column<double>(type: "REAL", nullable: true),
+                    BarometricPressure_Unit = table.Column<string>(type: "TEXT", nullable: true),
+                    BarometricPressure_Value = table.Column<double>(type: "REAL", nullable: true),
+                    Humidity_Unit = table.Column<string>(type: "TEXT", nullable: true),
+                    Humidity_Value = table.Column<double>(type: "REAL", nullable: true),
+                    WaterTemperature_Unit = table.Column<string>(type: "TEXT", nullable: true),
+                    WaterTemperature_Value = table.Column<double>(type: "REAL", nullable: true)
                 },
                 constraints: table =>
                 {
