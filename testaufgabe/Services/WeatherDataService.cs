@@ -45,17 +45,29 @@ namespace testaufgabe.Services
             throw new NotImplementedException();
         }
 
-        public async Task<List<WeatherData>> GetWeatherDataCount(DateTime start, DateTime end, WeatherDataStation? station)
+        public async Task<int> GetWeatherDataCount(DateTime start, DateTime end, WeatherDataStation? station)
         {
             CheckDateTimes(start, end);
-            throw new NotImplementedException();
+            return await _repository.GetWeatherDataCountAsync(start, end, station);
         }
 
         public async Task<WeatherData> GetWeatherDataMax(DateTime start, DateTime end, WeatherDataType? weatherDataType, WeatherDataStation? station)
         {
             CheckDateTimes(start, end);
             CheckWeatherDataType(weatherDataType);
-            throw new NotImplementedException();
+
+            var weatherData = await _repository.GetWeatherDataAsync(start, end, station);
+
+            var maxEntry = weatherDataType switch
+            {
+                WeatherDataType.AirTemperature => weatherData.MaxBy(w => w.AirTemperature.Value),
+                WeatherDataType.WaterTemperature => weatherData.MaxBy(w => w.WaterTemperature.Value),
+                WeatherDataType.BarometricPressure => weatherData.MaxBy(w => w.BarometricPressure.Value),
+                WeatherDataType.Humidity => weatherData.MaxBy(w => w.Humidity.Value),
+                _ => throw new ArgumentException($"Unkown Enum Value {weatherDataType}")
+            };
+
+            return maxEntry;
         }
 
         public async Task<WeatherData> GetWeatherDataMin(DateTime start, DateTime end, WeatherDataType? weatherDataType, WeatherDataStation? station)

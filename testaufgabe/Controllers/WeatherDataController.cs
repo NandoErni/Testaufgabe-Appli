@@ -98,17 +98,17 @@ namespace testaufgabe.Controllers
         [HttpGet("count")]
         public async Task<IActionResult> GetWeatherDataCount(DateTime start, DateTime end, WeatherDataStation? station = null)
         {
-            List<WeatherData> weatherData;
+            int weatherDataCount;
             try
             {
-                weatherData = await _service.GetWeatherDataCount(start, end, station);
+                weatherDataCount = await _service.GetWeatherDataCount(start, end, station);
             }
             catch (ArgumentException ex)
             {
                 return BadRequest(ex.Message);
             }
 
-            return Ok(weatherData);
+            return Ok(weatherDataCount);
         }
     }
 }

@@ -88,6 +88,17 @@ namespace Tests
         }
 
         [Fact]
+        public async Task GetWeatherDataCountAsync_ShouldCheckOrderOfTimestamps()
+        {
+            using var context = new WeatherDataContext(_dbContextOptions);
+
+            var repository = await CreateRepositoryWithData(context);
+
+            await Assert.ThrowsAsync<ArgumentException>(() => repository.GetWeatherDataCountAsync(DateTime.MaxValue, DateTime.MinValue));
+
+        }
+
+        [Fact]
         public async Task GetWeatherDataAsync_ShouldRespectTimeBoundary()
         {
             using var context = new WeatherDataContext(_dbContextOptions);

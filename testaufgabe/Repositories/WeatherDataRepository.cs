@@ -16,17 +16,7 @@ namespace testaufgabe.Repositories
 
         public async Task<IEnumerable<WeatherData>> GetWeatherDataAsync(DateTime start, DateTime end, WeatherDataStation? station = null)
         {
-            if (end < start)
-            {
-                throw new ArgumentException($"The start time {start} has to be before the end time {end}");
-            }
-
-            var query = _context.WeatherData.AsQueryable();
-            if (station.HasValue)
-            {
-                query = query.Where(d => d.Station == station);
-            }
-            query = query.Where(d => d.Timestamp > start && d.Timestamp < end);
+            var query = GetQueryable(start, end, station);
 
             return await query.ToListAsync();
         }
@@ -41,6 +31,30 @@ namespace testaufgabe.Repositories
         {
             _context.WeatherData.RemoveRange(weatherData);
             await _context.SaveChangesAsync();
+        }
+
+        public async Task<int> GetWeatherDataCountAsync(DateTime start, DateTime end, WeatherDataStation? station = null)
+        {
+            var query = GetQueryable(start, end, station);
+
+            return query.Count();
+        }
+
+        private IQueryable<WeatherData> GetQueryable(DateTime start, DateTime end, WeatherDataStation? station = null)
+        {
+            if (end < start)
+            {
+                throw new ArgumentException($"The start time {start} has to be before the end time {end}");
+            }
+
+            var query = _context.WeatherData.AsQueryable();
+            if (station.HasValue)
+            {
+                query = query.Where(d => d.Station == station);
+            }
+            query = query.Where(d => d.Timestamp > start && d.Timestamp < end);
+
+            return query;
         }
     }
 }

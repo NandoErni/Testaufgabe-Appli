@@ -68,7 +68,6 @@ namespace Tests
         [Fact]
         public async Task GetWeatherData_ShouldReturnMinimalEntry()
         {
-
             var weatherData = await _service.GetWeatherDataMin(DateTime.MinValue, DateTime.MaxValue, WeatherDataType.AirTemperature, null);
             Assert.Equal(11.2, weatherData.AirTemperature.Value);
             Assert.Equal("°C", weatherData.AirTemperature.Unit);
@@ -81,7 +80,13 @@ namespace Tests
         [Fact]
         public async Task GetWeatherData_ShouldReturnMaximalEntry()
         {
+            var weatherData = await _service.GetWeatherDataMax(DateTime.MinValue, DateTime.MaxValue, WeatherDataType.AirTemperature, null);
+            Assert.Equal(60, weatherData.AirTemperature.Value);
+            Assert.Equal("°C", weatherData.AirTemperature.Unit);
 
+            weatherData = await _service.GetWeatherDataMax(DateTime.MinValue, DateTime.MaxValue, WeatherDataType.BarometricPressure, null);
+            Assert.Equal(999, weatherData.BarometricPressure.Value);
+            Assert.Equal("hPa", weatherData.BarometricPressure.Unit);
         }
 
         [Fact]
@@ -93,7 +98,8 @@ namespace Tests
         [Fact]
         public async Task GetWeatherData_ShouldReturnNumberOfEntries()
         {
-
+            var weatherDataCount = await _service.GetWeatherDataCount(DateTime.MinValue, DateTime.MaxValue, null);
+            Assert.Equal(6, weatherDataCount);
         }
     }
 }
