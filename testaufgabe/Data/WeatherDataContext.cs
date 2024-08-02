@@ -1,5 +1,6 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore;
+using testaufgabe.Models;
 
 namespace testaufgabe.Data
 {
@@ -9,6 +10,8 @@ namespace testaufgabe.Data
             : base(options)
         {
         }
+
+        public DbSet<WeatherData> WeatherData { get; set; }
     }
 }
 

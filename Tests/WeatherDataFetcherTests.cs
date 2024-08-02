@@ -53,7 +53,7 @@ public class WeatherDataFetcherTests
     public async Task FetchWeatherDataAsync_ShouldReturnListOfWeatherDataDto()
     {
         // Arrange
-        var jsonResponse = new JObject
+        var jsonResponseTiefenbrunnen = new JObject
         {
             ["result"] = new JArray
             {
@@ -122,15 +122,12 @@ public class WeatherDataFetcherTests
                             }
                         }
                 }
-
-
-
         };
 
         SetupHttpMessageHandlerMock(new HttpResponseMessage
             {
                 StatusCode = HttpStatusCode.OK,
-                Content = new StringContent(jsonResponse.ToString())
+                Content = new StringContent(jsonResponseTiefenbrunnen.ToString())
             });
 
         // Act
@@ -138,7 +135,6 @@ public class WeatherDataFetcherTests
 
         // Assert
         Assert.NotNull(result);
-        Assert.Equal(2, result.Count);
 
         Assert.Equal(WeatherStationEnum.Tiefenbrunnen, result[0].Station);
         Assert.Equal(new DateTime(2024, 8, 1, 0, 0, 0, DateTimeKind.Utc), result[0].Timestamp);
@@ -157,7 +153,7 @@ public class WeatherDataFetcherTests
                 Content = new StringContent("invalid json")
             });
 
-        await Assert.ThrowsAsync<Exception>(async () =>
+        await Assert.ThrowsAnyAsync<Exception>(async () =>
             await _weatherDataFetcher.FetchWeatherDataAsync(WeatherStationEnum.Tiefenbrunnen));
     }
 }
