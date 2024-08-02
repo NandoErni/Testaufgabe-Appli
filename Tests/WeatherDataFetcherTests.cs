@@ -9,40 +9,45 @@ using testaufgabe.Dtos;
 using testaufgabe.Utils;
 namespace Tests;
 
-    public class WeatherDataFetcherTests
+public class WeatherDataFetcherTests
+{
+
+    private readonly Mock<HttpMessageHandler> _httpMessageHandlerMock;
+    private readonly HttpClient _httpClient;
+    private readonly WeatherDataFetcher _weatherDataFetcher;
+
+    public WeatherDataFetcherTests()
+    {
+        _httpMessageHandlerMock = new Mock<HttpMessageHandler>(MockBehavior.Strict);
+        _httpClient = new HttpClient(_httpMessageHandlerMock.Object);
+        _weatherDataFetcher = new WeatherDataFetcher(_httpClient);
+    }
+
+    private void SetupHttpMessageHandlerMock(HttpResponseMessage desiredResponseMessage)
+    {
+        _httpMessageHandlerMock
+            .Protected()
+            .Setup<Task<HttpResponseMessage>>(
+                nameof(HttpClient.SendAsync),
+                ItExpr.Is<HttpRequestMessage>(req => req.Method == HttpMethod.Get),
+                ItExpr.IsAny<CancellationToken>())
+            .ReturnsAsync(desiredResponseMessage);
+    }
+
+    [Fact]
+    public async Task FetchWeatherDataAsync_ShouldThrowHttpRequestException_WhenRequestFails()
     {
 
-        private readonly Mock<HttpMessageHandler> _httpMessageHandlerMock;
-        private readonly HttpClient _httpClient;
-        private readonly WeatherDataFetcher _weatherDataFetcher;
-
-        public WeatherDataFetcherTests()
-        {
-            _httpMessageHandlerMock = new Mock<HttpMessageHandler>(MockBehavior.Strict);
-            _httpClient = new HttpClient(_httpMessageHandlerMock.Object);
-            _weatherDataFetcher = new WeatherDataFetcher(_httpClient);
-        }
-
-        [Fact]
-        public async Task FetchWeatherDataAsync_ShouldThrowHttpRequestException_WhenRequestFails()
-        {
 
 
+        SetupHttpMessageHandlerMock(new HttpResponseMessage
+            {
+                StatusCode = HttpStatusCode.BadRequest
+            });
 
-            _httpMessageHandlerMock
-                .Protected()
-                .Setup<Task<HttpResponseMessage>>(
-                    nameof(HttpClient.SendAsync),
-                    ItExpr.Is<HttpRequestMessage>(req => req.Method == HttpMethod.Get),
-                    ItExpr.IsAny<CancellationToken>())
-                .ReturnsAsync(new HttpResponseMessage
-                {
-                    StatusCode = HttpStatusCode.BadRequest
-                });
-
-            await Assert.ThrowsAsync<HttpRequestException>(async () =>
-                await _weatherDataFetcher.FetchWeatherDataAsync(WeatherStationEnum.Tiefenbrunnen));
-        }
+        await Assert.ThrowsAsync<HttpRequestException>(async () =>
+            await _weatherDataFetcher.FetchWeatherDataAsync(WeatherStationEnum.Tiefenbrunnen));
+    }
 
     [Fact]
     public async Task FetchWeatherDataAsync_ShouldReturnListOfWeatherDataDto()
@@ -117,18 +122,12 @@ namespace Tests;
                             }
                         }
                 }
-                        
-                    
-            
+
+
+
         };
 
-        _httpMessageHandlerMock
-            .Protected()
-            .Setup<Task<HttpResponseMessage>>(
-                "SendAsync",
-                ItExpr.Is<HttpRequestMessage>(req => req.Method == HttpMethod.Get),
-                ItExpr.IsAny<CancellationToken>())
-            .ReturnsAsync(new HttpResponseMessage
+        SetupHttpMessageHandlerMock(new HttpResponseMessage
             {
                 StatusCode = HttpStatusCode.OK,
                 Content = new StringContent(jsonResponse.ToString())
@@ -147,6 +146,19 @@ namespace Tests;
         Assert.Equal("°C", result[0].Values.WaterTemperature.Unit);
         Assert.Equal(59, result[1].Values.Humidity.Value);
         Assert.Equal("%", result[1].Values.Humidity.Unit);
+    }
+
+    [Fact]
+    public async Task FetchWeatherDataAsync_ShouldThrowException_WhenParsingFails()
+    {
+        SetupHttpMessageHandlerMock(new HttpResponseMessage
+            {
+                StatusCode = HttpStatusCode.OK,
+                Content = new StringContent("invalid json")
+            });
+
+        await Assert.ThrowsAsync<Exception>(async () =>
+            await _weatherDataFetcher.FetchWeatherDataAsync(WeatherStationEnum.Tiefenbrunnen));
     }
 }
 

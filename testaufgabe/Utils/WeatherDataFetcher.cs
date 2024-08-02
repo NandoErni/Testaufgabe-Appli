@@ -35,6 +35,15 @@ namespace testaufgabe.Utils
                 throw new Exception("Failed to parse weather data.");
             }
 
+
+            // Filter out records with missing or invalid values
+            records = records.FindAll(record =>
+                record.Value.HasValue &&
+                !string.IsNullOrEmpty(record.Station) &&
+                !string.IsNullOrEmpty(record.Type) &&
+                !string.IsNullOrEmpty(record.Unit) &&
+                record.Timestamp != default(DateTime));
+
             return records;
         }
     }
