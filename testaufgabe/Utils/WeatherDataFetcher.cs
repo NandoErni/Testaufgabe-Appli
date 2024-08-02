@@ -1,4 +1,5 @@
 ﻿using System;
+using Microsoft.AspNetCore.WebUtilities;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using testaufgabe.Dtos;
@@ -15,16 +16,38 @@ namespace testaufgabe.Utils
 			_httpClient = httpClient;
 		}
 
-        public async Task<List<WeatherDataDto>> FetchWeatherDataAsync(params WeatherStationEnum[] weatherStations)
+        public async Task<List<WeatherDataDto>> FetchSortedWeatherDataAsync(DateTime start, DateTime end, int limit, params WeatherStationEnum[] weatherStations)
         {
-            var allWeatherData = await Task.WhenAll(from weatherStation in weatherStations select FetchWeatherDataAsync(weatherStation));
+            var allWeatherData = await Task.WhenAll(
+                from weatherStation
+                in weatherStations
+                select FetchSortedWeatherDataAsync(start, end, limit, weatherStation)
+                );
             return allWeatherData.SelectMany(i => i).ToList();
         }
 
-        public async Task<List<WeatherDataDto>> FetchWeatherDataAsync(WeatherStationEnum weatherStation)
+        public async Task<List<WeatherDataDto>> FetchSortedWeatherDataAsync(DateTime start, DateTime end, int limit, WeatherStationEnum weatherStation)
         {
+
+            if (end < start)
+            {
+                throw new ArgumentException($"The start time {start} has to be before the end time {end}");
+            }
+
             var url = _baseUrl + weatherStation.ToString().ToLower();
-            var response = await _httpClient.GetAsync(url);
+
+
+            var param = new Dictionary<string, string>
+            {
+                { "start", start.ToString() },
+                { "end", start.ToString() },
+                { "sort", "timestamp_cet desc" },
+                { "limit",  limit.ToString() },
+            };
+
+            var endpoint = new Uri(QueryHelpers.AddQueryString(url, param));
+
+            var response = await _httpClient.GetAsync(endpoint);
 
             if (!response.IsSuccessStatusCode)
             {

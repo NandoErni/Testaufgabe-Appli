@@ -19,36 +19,37 @@ namespace testaufgabe.Services
 
         public async Task FetchAndStoreWeatherDataAsync()
         {
-            var data = await _fetcher.FetchWeatherDataAsync(WeatherStationEnum.Tiefenbrunnen, WeatherStationEnum.Mythenquai);
+            var data = await _fetcher.FetchSortedWeatherDataAsync(
+                DateTime.Today,
+                DateTime.Today.Subtract(TimeSpan.FromDays(1)),
+                100,
+                WeatherStationEnum.Tiefenbrunnen,
+                WeatherStationEnum.Mythenquai
+                );
             //await _repository.SaveWeatherDataAsync(data);
         }
 
-        internal Task<List<WeatherData>> GetWeatherData(DateTime start, DateTime end, WeatherDataType? weatherDataType, WeatherDataStation? station)
+        public Task<List<WeatherData>> GetWeatherData(DateTime start, DateTime end, WeatherDataType? weatherDataType, WeatherDataStation? station)
         {
             throw new NotImplementedException();
         }
 
-        internal Task<List<WeatherData>> GetWeatherDataAvg(DateTime start, DateTime end, WeatherDataType? weatherDataType, WeatherDataStation? station)
+        public Task<List<WeatherData>> GetWeatherDataAvg(DateTime start, DateTime end, WeatherDataType? weatherDataType, WeatherDataStation? station)
         {
             throw new NotImplementedException();
         }
 
-        internal Task<List<WeatherData>> GetWeatherDataCount(DateTime start, DateTime end, WeatherDataType? weatherDataType, WeatherDataStation? station)
+        public Task<List<WeatherData>> GetWeatherDataCount(DateTime start, DateTime end, WeatherDataType? weatherDataType, WeatherDataStation? station)
         {
             throw new NotImplementedException();
         }
 
-        internal Task<List<WeatherData>> GetWeatherDataMax(DateTime start, DateTime end, WeatherDataType? weatherDataType, WeatherDataStation? station)
+        public Task<List<WeatherData>> GetWeatherDataMax(DateTime start, DateTime end, WeatherDataType? weatherDataType, WeatherDataStation? station)
         {
             throw new NotImplementedException();
         }
 
-        internal Task<List<WeatherData>> GetWeatherDataMin(DateTime start, DateTime end, WeatherDataType? weatherDataType, WeatherDataStation? station)
-        {
-            throw new NotImplementedException();
-        }
-
-        internal Task UpdateWeatherData()
+        public Task<List<WeatherData>> GetWeatherDataMin(DateTime start, DateTime end, WeatherDataType? weatherDataType, WeatherDataStation? station)
         {
             throw new NotImplementedException();
         }

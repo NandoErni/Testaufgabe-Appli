@@ -42,7 +42,7 @@ namespace testaufgabe.Controllers
         [HttpPost]
         public async Task<IActionResult> UpdateWeatherData()
         {
-            await _service.UpdateWeatherData();
+            await _service.FetchAndStoreWeatherDataAsync();
 
             return Ok();
         }

@@ -46,7 +46,7 @@ public class WeatherDataFetcherTests
             });
 
         await Assert.ThrowsAsync<HttpRequestException>(async () =>
-            await _weatherDataFetcher.FetchWeatherDataAsync(WeatherStationEnum.Tiefenbrunnen));
+            await _weatherDataFetcher.FetchSortedWeatherDataAsync(DateTime.MinValue, DateTime.MaxValue, int.MaxValue, WeatherStationEnum.Tiefenbrunnen));
     }
 
     [Fact]
@@ -131,7 +131,7 @@ public class WeatherDataFetcherTests
             });
 
         // Act
-        var result = await _weatherDataFetcher.FetchWeatherDataAsync(WeatherStationEnum.Tiefenbrunnen);
+        var result = await _weatherDataFetcher.FetchSortedWeatherDataAsync(DateTime.MinValue, DateTime.MaxValue, int.MaxValue, WeatherStationEnum.Tiefenbrunnen);
 
         // Assert
         Assert.NotNull(result);
@@ -154,7 +154,20 @@ public class WeatherDataFetcherTests
             });
 
         await Assert.ThrowsAnyAsync<Exception>(async () =>
-            await _weatherDataFetcher.FetchWeatherDataAsync(WeatherStationEnum.Tiefenbrunnen));
+            await _weatherDataFetcher.FetchSortedWeatherDataAsync(DateTime.MinValue, DateTime.MaxValue, int.MaxValue, WeatherStationEnum.Tiefenbrunnen));
+    }
+
+    [Fact]
+    public async Task FetchWeatherDataAsync_ShouldThrowException_WhenDatetimesAreIncorrect()
+    {
+        SetupHttpMessageHandlerMock(new HttpResponseMessage
+        {
+            StatusCode = HttpStatusCode.OK,
+            Content = new StringContent("invalid json")
+        });
+
+        await Assert.ThrowsAnyAsync<ArgumentException>(async () =>
+            await _weatherDataFetcher.FetchSortedWeatherDataAsync(DateTime.MaxValue, DateTime.MinValue, int.MaxValue, WeatherStationEnum.Tiefenbrunnen));
     }
 }
 
