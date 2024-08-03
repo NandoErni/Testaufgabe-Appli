@@ -158,6 +158,31 @@ namespace Tests
                         Unit = "%"
                     },
 
+            },new WeatherData
+            {
+                Station = WeatherDataStation.Mythenquai,
+                Timestamp = new DateTime(2023, 5, 13),
+                    AirTemperature = new WeatherDataValue()
+                    {
+                        Value = 11.2,
+                        Unit = "°C"
+                    },
+                    WaterTemperature = new WeatherDataValue()
+                    {
+                        Value = 2.1,
+                        Unit = "°C"
+                    },
+                    BarometricPressure = new WeatherDataValue()
+                    {
+                        Value = 910.6,
+                        Unit = "hPa"
+                    },
+                    Humidity = new WeatherDataValue()
+                    {
+                        Value = 98.7,
+                        Unit = "%"
+                    },
+
             },
             };
         }

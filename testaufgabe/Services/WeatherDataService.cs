@@ -22,7 +22,7 @@ namespace testaufgabe.Services
             var data = await _fetcher.FetchSortedWeatherDataAsync(
                 DateTime.Today.Subtract(TimeSpan.FromDays(2)),
                 DateTime.Today.Subtract(TimeSpan.FromDays(1)),
-                100,
+                50,
                 WeatherStationEnum.Tiefenbrunnen,
                 WeatherStationEnum.Mythenquai
                 );
