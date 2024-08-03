@@ -21,14 +21,14 @@ namespace testaufgabe.Services
         public async Task FetchAndStoreWeatherDataAsync()
         {
             var data = await _fetcher.FetchSortedWeatherDataAsync(
-                DateTime.Today.Subtract(TimeSpan.FromDays(1)),
                 DateTime.Today.Subtract(TimeSpan.FromDays(2)),
+                DateTime.Today.Subtract(TimeSpan.FromDays(1)),
                 100,
                 WeatherStationEnum.Tiefenbrunnen,
                 WeatherStationEnum.Mythenquai
                 );
 
-            var dataUsingModels = data.Select(WeatherDataDtoToModel);
+            var dataUsingModels = data.Where(d => d.Timestamp.HasValue).Select(WeatherDataDtoToModel);
             await _repository.SaveWeatherDataAsync(dataUsingModels);
         }
 
@@ -109,12 +109,16 @@ namespace testaufgabe.Services
 
         private WeatherData WeatherDataDtoToModel(WeatherDataDto dto)
         {
+            if (!dto.Timestamp.HasValue)
+            {
+                throw new ArgumentException("There is no Timestamp");
+            }
+
             WeatherDataStation station = dto.Station switch
             {
                 WeatherStationEnum.Mythenquai => WeatherDataStation.Mythenquai,
                 WeatherStationEnum.Tiefenbrunnen => WeatherDataStation.Tiefenbrunnen,
                 _ => throw new ArgumentException($"Unkown Weather data type '{dto.Station}'")
-
             };
 
 
@@ -123,7 +127,7 @@ namespace testaufgabe.Services
             return new WeatherData()
             {
                 Station = station,
-                Timestamp = dto.Timestamp,
+                Timestamp = dto.Timestamp.Value,
                 AirTemperature = new WeatherDataValue()
                 {
                     Value = dto.Values.AirTemperature.Value.Value,

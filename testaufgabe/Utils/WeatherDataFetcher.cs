@@ -37,7 +37,7 @@ namespace testaufgabe.Utils
             var url = _baseUrl + weatherStation.ToString().ToLower();
 
 
-            var param = new Dictionary<string, string>
+            var param = new Dictionary<string, string?>
             {
                 { "start", start.ToString() },
                 { "end", start.ToString() },

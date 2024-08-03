@@ -9,12 +9,12 @@ namespace testaufgabe.Models
         public WeatherDataStation Station;
         public DateTime Timestamp;
 
-        public WeatherDataValue AirTemperature;
+        public required WeatherDataValue AirTemperature;
 
-        public WeatherDataValue WaterTemperature;
+        public required WeatherDataValue WaterTemperature;
 
-        public WeatherDataValue BarometricPressure;
+        public required WeatherDataValue BarometricPressure;
 
-        public WeatherDataValue Humidity;
+        public required WeatherDataValue Humidity;
     }
 }
