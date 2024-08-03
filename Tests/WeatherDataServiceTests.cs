@@ -1,6 +1,4 @@
-﻿using System;
-using System.Net.Http;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Moq;
 using testaufgabe.Data;
 using testaufgabe.Models;
@@ -10,7 +8,7 @@ using testaufgabe.Utils;
 
 namespace Tests
 {
-	public class WeatherDataServiceTests
+    public class WeatherDataServiceTests
 	{
 		private readonly WeatherDataService _service;
 

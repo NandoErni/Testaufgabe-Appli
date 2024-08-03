@@ -52,7 +52,6 @@ public class WeatherDataFetcherTests
     [Fact]
     public async Task FetchWeatherDataAsync_ShouldReturnListOfWeatherDataDto()
     {
-        // Arrange
         var jsonResponseTiefenbrunnen = new JObject
         {
             ["result"] = new JArray
@@ -120,6 +119,38 @@ public class WeatherDataFetcherTests
                                     ["status"] = "ok"
                                 },
                             }
+                        },
+                        new JObject
+                        {
+                            ["station"] = "tiefenbrunnen",
+                            ["timestamp"] = "2024-08-01T00:00:00Z",
+                            ["values"] = new JObject
+                            {
+                                ["air_temperature"] = new JObject
+                                {
+                                    ["value"] = null,
+                                    ["unit"] = "°C",
+                                    ["status"] = "ok"
+                                },
+                                ["water_temperature"] = new JObject
+                                {
+                                    ["value"] = 11.9,
+                                    ["unit"] = null,
+                                    ["status"] = "ok"
+                                },
+                                ["barometric_pressure_qfe"] = new JObject
+                                {
+                                    ["value"] = null,
+                                    ["unit"] = null,
+                                    ["status"] = "ok"
+                                },
+                                ["humidity"] = new JObject
+                                {
+                                    ["value"] = null,
+                                    ["unit"] = "%",
+                                    ["status"] = "ok"
+                                },
+                            }
                         }
                 }
         };
@@ -130,10 +161,8 @@ public class WeatherDataFetcherTests
                 Content = new StringContent(jsonResponseTiefenbrunnen.ToString())
             });
 
-        // Act
         var result = await _weatherDataFetcher.FetchSortedWeatherDataAsync(DateTime.MinValue, DateTime.MaxValue, int.MaxValue, WeatherStationEnum.Tiefenbrunnen);
 
-        // Assert
         Assert.NotNull(result);
 
         Assert.Equal(WeatherStationEnum.Tiefenbrunnen, result[0].Station);
