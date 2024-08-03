@@ -8,9 +8,9 @@ Bei Swagger wurde aber kaum Zeit investiert, da es nur mittel zum Zweck ist. (--
 Als db kommt SQLite zum Einsatz. Anbindung läuft über das EF Core (Code first)
 
 ### Projekt struktur
-- ASP.NET App ist im Projekt "testaufgabe"
-  - DB Create Scripts sind im Ordner "Migration"
-- Alle Unit-Tests sind im Projekt "Tests"
+- ASP.NET App ist im Projekt [testaufgabe](https://github.com/NandoErni/Testaufgabe-Appli/tree/main/testaufgabe)
+  - DB Migration Scripts sind im Ordner [Migration](https://github.com/NandoErni/Testaufgabe-Appli/tree/main/testaufgabe/Migrations)
+- Alle Unit-Tests sind im Projekt [Tests](https://github.com/NandoErni/Testaufgabe-Appli/tree/main/Tests)
 
 ### Techstack
 - .Net 8
