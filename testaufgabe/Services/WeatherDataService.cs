@@ -3,7 +3,6 @@ using testaufgabe.Dtos;
 using testaufgabe.Models;
 using testaufgabe.Repositories;
 using testaufgabe.Utils;
-using static System.Collections.Specialized.BitVector32;
 
 namespace testaufgabe.Services
 {
@@ -29,7 +28,7 @@ namespace testaufgabe.Services
                 );
 
             var dataUsingModels = data.Where(d => d.Timestamp.HasValue).Select(WeatherDataDtoToModel);
-            await _repository.SaveWeatherDataAsync(dataUsingModels);
+            await _repository.SaveUniqueWeatherDataAsync(dataUsingModels);
         }
 
         public async Task<List<WeatherData>> GetWeatherData(DateTime start, DateTime end, WeatherDataStation? station)

@@ -1,11 +1,11 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Migrations;
 using testaufgabe.Data;
 using testaufgabe.Models;
 
 namespace testaufgabe.Repositories
 {
-	public class WeatherDataRepository
+    public class WeatherDataRepository
 	{
         private readonly WeatherDataContext _context;
 
@@ -21,11 +21,22 @@ namespace testaufgabe.Repositories
             return await query.ToListAsync();
         }
 
-        public async Task SaveWeatherDataAsync(IEnumerable<WeatherData> weatherData)
+        public async Task SaveUniqueWeatherDataAsync(IEnumerable<WeatherData> weatherData)
 		{
-            _context.WeatherData.AddRange(weatherData);
+
+            foreach (var data in weatherData)
+            {
+                if (await _context.WeatherData.AnyAsync(w => w.Timestamp == data.Timestamp && w.Station == data.Station))
+                {
+                    continue;
+                }
+
+                await _context.WeatherData.AddAsync(data);
+            }
+
             await _context.SaveChangesAsync();
-		}
+
+        }
 
         public async Task RemoveGivenWeatherDataAsync(IEnumerable<WeatherData> weatherData)
         {

@@ -61,10 +61,10 @@ namespace Tests
                         Value = 98.7,
                         Unit = "%"
                     },
-                
+
             }};
 
-            await repository.SaveWeatherDataAsync(weatherData);
+            await repository.SaveUniqueWeatherDataAsync(weatherData);
             var savedData = await context.WeatherData.FirstOrDefaultAsync();
 
             Assert.NotNull(savedData);
@@ -74,6 +74,85 @@ namespace Tests
             Assert.Equal(weatherData.First().WaterTemperature, savedData.WaterTemperature);
             Assert.Equal(weatherData.First().BarometricPressure, savedData.BarometricPressure);
             Assert.Equal(weatherData.First().Humidity, savedData.Humidity);
+        }
+
+        [Fact]
+        public async Task SaveWeatherDataAsync_ShouldNotSaveDuplicates()
+        {
+            using var context = new WeatherDataContext(_dbContextOptions);
+            var repository = new WeatherDataRepository(context);
+
+            var singleWeatherData = new WeatherData
+            {
+                Station = WeatherDataStation.Tiefenbrunnen,
+                Timestamp = new DateTime(2021, 4, 10),
+                AirTemperature = new WeatherDataValue()
+                {
+                    Value = 11.2,
+                    Unit = "°C"
+                },
+                WaterTemperature = new WeatherDataValue()
+                {
+                    Value = 2.1,
+                    Unit = "°C"
+                },
+                BarometricPressure = new WeatherDataValue()
+                {
+                    Value = 910.6,
+                    Unit = "hPa"
+                },
+                Humidity = new WeatherDataValue()
+                {
+                    Value = 98.7,
+                    Unit = "%"
+                },
+
+            };
+
+            var duplicateWeatherData = new WeatherData
+            {
+                Station = WeatherDataStation.Tiefenbrunnen,
+                Timestamp = new DateTime(2021, 4, 10),
+                AirTemperature = new WeatherDataValue()
+                {
+                    Value = 11.2,
+                    Unit = "°C"
+                },
+                WaterTemperature = new WeatherDataValue()
+                {
+                    Value = 2.1,
+                    Unit = "°C"
+                },
+                BarometricPressure = new WeatherDataValue()
+                {
+                    Value = 910.6,
+                    Unit = "hPa"
+                },
+                Humidity = new WeatherDataValue()
+                {
+                    Value = 98.7,
+                    Unit = "%"
+                },
+
+            };
+
+            var weatherData = new List<WeatherData>()
+            {
+                singleWeatherData,
+            };
+
+            await repository.SaveUniqueWeatherDataAsync(weatherData);
+
+
+            weatherData = new List<WeatherData>()
+            {
+                duplicateWeatherData,
+            };
+
+            await repository.SaveUniqueWeatherDataAsync(weatherData);
+            var savedData = await context.WeatherData.ToListAsync();
+
+            Assert.Single(savedData);
         }
 
         [Fact]
